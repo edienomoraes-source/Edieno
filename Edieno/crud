@@ -1,0 +1,98 @@
+
+import os
+
+pessoas = [ ]
+
+
+def salvar_arquivo():
+    with open("pessoas.txt","w",encoding="utf-8") as f:
+        for pessoa in pessoas:
+            linha = f"{pessoa['nome']};{pessoa['idade']};{pessoa['endereco']}\n"        
+            f.write(linha)
+
+def carregar_arquivo():
+    global pessoas
+    if os.path.exists("pessoas.txt"):
+        with open("pessoas.txt","r",encoding="utf-8") as f:
+            for linha in f:
+                partes = linha.strip().split(";")
+                if len(partes)==3:
+                    nome,idade,endereco=partes
+                    try:
+                     idade =int(idade)
+                     pessoas.append({"nome":nome,"idade":idade,"endereco":endereco})
+                    except ValueError:
+                        pass
+   
+   
+                 
+def criar():
+  nome = input("Digite seu nome\n")
+  idade = int(input("Digite sua idade\n"))
+  endereco = input("Informe seu endereço\n")
+  pessoa = {"nome":nome, "idade": idade, "endereco":endereco}
+  pessoas.append(pessoa)
+  salvar_arquivo()
+  print("Pessoa cadastrada com sucesso")
+ 
+def ler():
+    if not pessoas:
+      print("Nehuma pessoa cadastrada\n")
+    else:
+      for i, pessoa in enumerate(pessoas):
+        print(f"{i} - Nome: {pessoa['nome']},Idade: {pessoa['idade']}, Endereço: {pessoa['endereco']}")
+
+def atualizar ():
+  ler()
+  if pessoas:
+      indice = int(input("Digite o indice da pessoa para atualizar:\n"))
+      if 0 <= indice <len(pessoas):
+        nome = input("Novo nome")
+        idade = int(input("Nova idade"))
+        endereco = (input("Novo endereço"))
+        pessoas[indice]["nome"] = nome
+        pessoas[indice]["idade"] = idade
+        pessoas[indice]["endereco"] = endereco
+        salvar_arquivo()
+        print("Pessoa Atualizada")
+      else:
+       print("indice inválido")
+
+def deletar():
+  ler()
+  if pessoas:
+    indice = int(input("Digite o indice da pessoa para deletar:\n"))
+    if 0 <= indice < len(pessoas):
+      removido = pessoas.pop(indice)
+      salvar_arquivo()
+      print(f"Pessoa {removido['nome']} removida com sucesso")
+    else:
+      print("Indice inválido")    
+     
+  #programa principal
+ 
+  carregar_arquivo()
+
+while True:
+  print("\n-------MENU DO SISTEMA----------")
+  print("1- CRIAR")
+  print("2- LER")
+  print("3- ATUALIZAR")
+  print("4- DELETAR")
+  print("5- SAIR")
+ 
+  opcao = input("Digite sua opção: ")
+ 
+  if opcao == "1":
+    criar()
+  elif opcao == "2":
+    ler()
+  elif opcao == "3":
+    atualizar()
+  elif opcao == "4":
+    deletar()
+  elif opcao =="5":
+    print("Saindo do programa")
+    break
+  else:
+    print("Opcao invalida ! tente novamenta")
